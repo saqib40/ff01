@@ -18,7 +18,7 @@ Yes, it surely is the first step to achieve Buddha's enlightenment. No doubt abo
 
 
 
-## 📥 How to Install (The Hacker Way)
+## How to Install 
 Since google charges money for distribution, do this:
 
 1.  Go to the **[Releases](../../releases)** page of this repo.
