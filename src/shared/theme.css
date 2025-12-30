@@ -1,0 +1,75 @@
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+
+:root {
+  /* Dark Slate Palette */
+  --bg-main: #0f172a;       /* Deep dark blue-grey */
+  --bg-card: #1e293b;       /* Slightly lighter for cards */
+  --bg-input: #334155;      /* Inputs */
+  
+  /* Text */
+  --text-main: #f1f5f9;     /* Almost white */
+  --text-muted: #94a3b8;    /* Muted grey */
+  
+  /* Accents */
+  --primary: #8b5cf6;       /* Violet/Purple for Focus */
+  --primary-hover: #7c3aed;
+  --danger: #ef4444;        /* Red for remove */
+  
+  /* Spacing & Borders */
+  --radius: 12px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  /* Make text look crisper on dark backgrounds */
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+/* Common Utility Classes */
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: white;
+}
+.btn-primary { background-color: var(--primary); }
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-danger { background-color: var(--danger); }
+
+.card {
+  background-color: var(--bg-card);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+input[type="text"] {
+  background: var(--bg-input);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  outline: none;
+}
+input[type="text"]:focus { border-color: var(--primary); }
+
+h1, h2, h3 {
+  letter-spacing: -0.02em; /* Makes headings look more compact and premium */
+  font-weight: 600;
+}
+
+.btn {
+  font-family: 'Poppins', sans-serif; /* Ensure buttons use it too */
+  letter-spacing: 0.01em;
+}

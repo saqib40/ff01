@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "FF01",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "src/popup/index.html" 
+  },
+  "options_ui": {
+    "page": "src/options/index.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/blocked/index.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
