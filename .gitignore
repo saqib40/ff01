@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-FF01.zip.zip
+*.zip
 
 node_modules
 dist

@@ -27,7 +27,7 @@ Since google charges money for distribution, do this:
 4.  Open Chrome and go to `chrome://extensions`.
 5.  Toggle **Developer Mode** on.
 6.  Click **Load Unpacked**.
-7.  Select the folder you just unzipped.
+7.  Select the dist folder within the folder you just unzipped.
 8.  **Done.** Pin the extension for comfort.
 
 
