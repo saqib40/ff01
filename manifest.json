@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "FF01",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "action": {
-    "default_popup": "src/popup/index.html" 
+    "default_popup": "src/popup/index.html"
   },
   "options_ui": {
     "page": "src/options/index.html",
@@ -11,8 +11,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["src/content/index.ts"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content/index.ts"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -22,8 +26,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/blocked/index.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "src/blocked/index.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }
