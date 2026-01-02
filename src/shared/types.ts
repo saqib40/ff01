@@ -1,6 +1,7 @@
 export interface BlockedSite {
   url: string;
   customImage?: string | null; // Optional specific image
+  blockedSince?: number; // Stores the timestamp (ms) when blocked
 }
 
 export interface AppSettings {

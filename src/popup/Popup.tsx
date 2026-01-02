@@ -7,6 +7,12 @@ const Popup = () => {
   const { settings, saveSettings, loading } = useStorage();
   const [currentHost, setCurrentHost] = useState<string>('');
   const [originalFullUrl, setOriginalFullUrl] = useState<string>('');
+  const [now, setNow] = useState<number>(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -14,7 +20,7 @@ const Popup = () => {
       if (currentTab?.url) {
         try {
           let urlToAnalyze = currentTab.url;
-          
+
           if (urlToAnalyze.includes('src/blocked/index.html')) {
             const urlObj = new URL(urlToAnalyze);
             const fromParam = urlObj.searchParams.get('from');
@@ -39,10 +45,22 @@ const Popup = () => {
 
   if (loading) return <div style={{ padding: '20px', background: 'var(--bg-main)', color: 'var(--text-main)' }}>Loading...</div>;
 
-  const blockedEntry = settings.blockedSites.find(site => 
+  const blockedEntry = settings.blockedSites.find(site =>
     currentHost.includes(site.url) && site.url !== ''
   );
   const isBlocked = !!blockedEntry;
+
+  const formatDuration = (timestamp?: number) => {
+    if (!timestamp) return "0d 0h 0m 0s";
+
+    const diff = Math.max(0, now - timestamp);
+    const seconds = Math.floor((diff / 1000) % 60);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  };
 
   const toggleBlock = async () => {
     if (!currentHost) return;
@@ -50,33 +68,33 @@ const Popup = () => {
     if (isBlocked) {
       const newSites = settings.blockedSites.filter(site => !currentHost.includes(site.url));
       await saveSettings({ blockedSites: newSites });
-      
+
       if (originalFullUrl && originalFullUrl !== currentHost) {
-         chrome.tabs.update({ url: originalFullUrl });
+        chrome.tabs.update({ url: originalFullUrl });
       } else {
-         chrome.tabs.reload();
+        chrome.tabs.reload();
       }
     } else {
-      const newSite: BlockedSite = { url: currentHost, customImage: null };
+      const newSite: BlockedSite = { url: currentHost, customImage: null, blockedSince: Date.now() };
       await saveSettings({ blockedSites: [...settings.blockedSites, newSite] });
       chrome.tabs.reload();
     }
-    
+
     window.close();
   };
 
   return (
-    <div style={{ 
-      width: '100%', 
+    <div style={{
+      width: '100%',
       height: '100%',
-      padding: '16px', 
-      background: 'var(--bg-main)', 
+      padding: '16px',
+      background: 'var(--bg-main)',
       color: 'var(--text-main)',
       display: 'flex',
       flexDirection: 'column',
       gap: '16px'
     }}>
-      
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <span style={{ fontSize: '20px' }}>🎯</span>
@@ -99,12 +117,17 @@ const Popup = () => {
             {isBlocked ? (
               <>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>🛡️</div>
-                <p style={{ margin: '0 0 20px 0', fontSize: '14px', color: 'var(--text-muted)' }}>
+                <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-muted)' }}>
                   Access Denied. Go do some work.
                 </p>
-                <button 
-                  className="btn btn-primary" 
-                  style={{ width: '100%' }} 
+                {blockedEntry?.blockedSince && (
+                  <div style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '15px', marginBottom: '20px' }}>
+                    🔥 Streak: {formatDuration(blockedEntry.blockedSince)}
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  style={{ width: '100%' }}
                   onClick={toggleBlock}
                 >
                   Unblock Site
@@ -116,9 +139,9 @@ const Popup = () => {
                 <p style={{ margin: '0 0 20px 0', fontSize: '14px', color: 'var(--text-muted)' }}>
                   This site is currently safe. For now.
                 </p>
-                <button 
-                  className="btn btn-danger" 
-                  style={{ width: '100%' }} 
+                <button
+                  className="btn btn-danger"
+                  style={{ width: '100%' }}
                   onClick={toggleBlock}
                 >
                   Ban This Distraction
@@ -128,18 +151,18 @@ const Popup = () => {
           </>
         ) : (
           <div style={{ color: 'var(--text-muted)', fontSize: '14px', fontStyle: 'italic' }}>
-            FF01 has no power here. <br/>(System Page)
+            FF01 has no power here. <br />(System Page)
           </div>
         )}
       </div>
 
       {/* Footer */}
       <div style={{ marginTop: 'auto' }}>
-        <button 
-          className="btn" 
-          style={{ 
-            width: '100%', 
-            background: 'var(--bg-input)', 
+        <button
+          className="btn"
+          style={{
+            width: '100%',
+            background: 'var(--bg-input)',
             border: '1px solid rgba(255,255,255,0.1)',
             color: 'var(--text-muted)',
             fontSize: '13px'
